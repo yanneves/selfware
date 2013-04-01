@@ -108,8 +108,9 @@
 			// calculate progress
 			progress = (val / rda) * 100;
 
-			// set progress in meter
-			$meter.width(((progress <= 100) ? progress : 100) + "%");
+			// set progress in document
+			setProgressInMeter_(progress);
+			setProgressInTitle_(progress);
 
 			// calculate progress state
 			state = (progress >= Level.Medium.value) ? ((progress >= Level.High.value) ? Level.High.state : Level.Medium.state) : Level.Low.state;
@@ -119,6 +120,15 @@
 			$tracker.addClass("progress-" + state);
 
 			/**
+			 *	Shows percentage progress in meter.
+			 *	@param {!Number | String} val Percentage progress value
+			 *	@returns {Node} Meter object, for chaining
+			 */
+			function setProgressInMeter_(val) {
+				$meter.width(((val <= 100) ? val : 100) + "%");
+			}
+
+			/**
 			 *	Shows percentage progress in page title.
 			 *	@param {!Number | String} val Percentage progress value
 			 *	@returns {Node} Title object, for chaining
@@ -126,6 +136,9 @@
 			function setProgressInTitle_(val) {
 				// nodes
 				var $title = $('title');
+
+				// round value to nearest hundredth
+				val = (Math.round(val * 100)) / 100;
 
 				// register original title of document
 				if(!DOC_TITLE) DOC_TITLE = $title.text();
